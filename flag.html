@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>flag</title>
+    <link rel="stylesheet" href="flag.css">
+</head>
+<body>
+    <div id="wrapper">
+        <form action="">
+            <input type="text" placeholder="Enter the country's name"><br>
+        
+             <button type="submit">get flag</button>
+        </form>
+        
+        <div class="flag"></div>
+
+    </div>
+    <script>
+        let form = document.querySelector('form')
+        form.onsubmit = (e)=>{
+            e.preventDefault();
+            deleteoldflag()
+
+            let input = document.querySelector('input').value
+            fetch('https://flagcdn.com/en/codes.json')
+            .then((Response)=>{return Response.json()})
+            .then((codes)=>{console.log(codes); getFlag(codes,input)})
+        }
+        function getFlag(codes,input){
+            input=input.toLowerCase()
+
+            let first = input[0].toUpperCase()
+            let inputsplitted = input.split('')
+            inputsplitted.splice(0,1,first)
+            
+            let final = inputsplitted.join('')
+            
+            for(let code in codes){
+                if(codes[code] ===final){
+                    let img = document.createElement('img')
+                    img.src = 'https://flagcdn.com/256x192/'+code+'.png'
+                    document.querySelector(".flag").appendChild(img)
+                }
+            }
+        }
+        function deleteoldflag(){
+            let oldflag = Array.from(document.querySelector(".flag").children)
+            if (oldflag.length>0){
+            oldflag.forEach((f1)=>{f1.remove()})
+            }
+        }
+   
+    </script>
+    
+</body>
+</html>
